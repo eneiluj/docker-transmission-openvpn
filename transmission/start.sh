@@ -31,6 +31,11 @@ if [[ "combustion" = "$TRANSMISSION_WEB_UI" ]]; then
   export TRANSMISSION_WEB_HOME=/opt/transmission-ui/combustion-release
 fi
 
+if [[ "transmissionic" = "$TRANSMISSION_WEB_UI" ]]; then
+  echo "Using Transmissionic UI, overriding TRANSMISSION_WEB_HOME"
+  export TRANSMISSION_WEB_HOME=/opt/transmission-ui/transmissionic
+fi
+
 if [[ "kettu" = "$TRANSMISSION_WEB_UI" ]]; then
   echo "Using Kettu UI, overriding TRANSMISSION_WEB_HOME"
   export TRANSMISSION_WEB_HOME=/opt/transmission-ui/kettu

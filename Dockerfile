@@ -1,6 +1,6 @@
 FROM alpine:3.13 as TransmissionUIs
 
-RUN apk --no-cache add curl jq \
+RUN apk --no-cache add curl jq zip \
     && mkdir -p /opt/transmission-ui \
     && echo "Install Shift" \
     && wget -qO- https://github.com/killemov/Shift/archive/master.tar.gz | tar xz -C /opt/transmission-ui \
@@ -12,6 +12,12 @@ RUN apk --no-cache add curl jq \
     && echo "Install kettu" \
     && wget -qO- https://github.com/endor/kettu/archive/master.tar.gz | tar xz -C /opt/transmission-ui \
     && mv /opt/transmission-ui/kettu-master /opt/transmission-ui/kettu \
+    && echo "Install Transmissionic" \
+    && TRANSMISSIONIC_VERSION=$(curl -s "https://api.github.com/repos/6c65726f79/Transmissionic/releases/latest" | jq -r .tag_name) \
+    && curl -o /opt/transmission-ui/transmissionic.zip -L \
+        "https://github.com/6c65726f79/Transmissionic/releases/download/${TRANSMISSIONIC_VERSION}/Transmissionic-webui-${TRANSMISSIONIC_VERSION}.zip" \
+    && unzip /opt/transmission-ui/transmissionic.zip -d /opt/transmission-ui && rm /opt/transmission-ui/transmissionic.zip \
+    && mv /opt/transmission-ui/web /opt/transmission-ui/transmissionic \
     && echo "Install Transmission-Web-Control" \
     && mkdir /opt/transmission-ui/transmission-web-control \
     && curl -sL $(curl -s https://api.github.com/repos/ronggang/transmission-web-control/releases/latest | jq --raw-output '.tarball_url') | tar -C /opt/transmission-ui/transmission-web-control/ --strip-components=2 -xz
